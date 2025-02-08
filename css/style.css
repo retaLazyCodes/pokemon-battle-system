@@ -1,0 +1,79 @@
+.battle {
+    position: relative; /* Permite posicionar elementos con absolute dentro */
+    width: 640px;
+    height: 360px;
+    background-image: url('../assets/img/bg-beach.jpg');
+    background-size: 140%; /* Zoom al 110% */
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0 auto; /* Centrar en la pantalla */
+}
+
+/* Estilos generales para todos los Pokémon */
+.pokemon {
+    position: absolute;
+}
+
+/* Pokémon del jugador (abajo a la izquierda) */
+.player-pokemon {
+    left: 25%; 
+    bottom: 15%;
+    transform: scale(1.5);
+}
+
+/* Pokémon del enemigo (arriba a la derecha) */
+.enemy-pokemon {
+    right: 25%;
+    top: 35%;
+}
+
+/* Sección de selección de movimientos */
+/* Asegurar que la sección de ataques se acople bien */
+.attack-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-top: 3px solid #ccc;
+    width: 640px; /* Igualar el ancho con la batalla */
+    margin: -5px auto 0 auto; /* Reducir el espacio entre la batalla y los movimientos */
+}
+
+.attack-title {
+    color: #c27c4d;
+    font-weight: bold;
+    font-size: 1.2em;
+    text-align: left;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.attack-buttons {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    gap: 5px;
+}
+
+.attack-btn {
+    flex: 1;
+    padding: 12px; /* Un poco más grande */
+    font-size: 1em;
+    font-weight: bold;
+    border: 2px solid #000;
+    cursor: pointer;
+    transition: 0.2s;
+    border-radius: 5px;
+}
+
+/* Ajuste de colores por tipo de ataque */
+.rock { background-color: #b8a038; color: #fff; }
+.fighting { background-color: #c03028; color: #fff; }
+.flying { background-color: #a890f0; color: #fff; }
+.normal { background-color: #a8a878; color: #fff; }
+
+/* Hover Effect */
+.attack-btn:hover {
+    filter: brightness(1.2);
+}
