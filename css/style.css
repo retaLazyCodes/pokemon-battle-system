@@ -68,10 +68,24 @@
 }
 
 /* Ajuste de colores por tipo de ataque */
-.rock { background-color: #b8a038; color: #fff; }
-.fighting { background-color: #c03028; color: #fff; }
-.flying { background-color: #a890f0; color: #fff; }
-.normal { background-color: #a8a878; color: #fff; }
+.normal   { background-color: #A8A878; color: #fff; }
+.fire     { background-color: #F08030; color: #fff; }
+.water    { background-color: #6890F0; color: #fff; }
+.electric { background-color: #F8D030; color: #fff; }
+.grass    { background-color: #78C850; color: #fff; }
+.ice      { background-color: #98D8D8; color: #fff; }
+.fighting { background-color: #C03028; color: #fff; }
+.poison   { background-color: #A040A0; color: #fff; }
+.ground   { background-color: #E0C068; color: #fff; }
+.flying   { background-color: #A890F0; color: #fff; }
+.psychic  { background-color: #F85888; color: #fff; }
+.bug      { background-color: #A8B820; color: #fff; }
+.rock     { background-color: #B8A038; color: #fff; }
+.ghost    { background-color: #705898; color: #fff; }
+.dragon   { background-color: #7038F8; color: #fff; }
+.dark     { background-color: #705848; color: #fff; }
+.steel    { background-color: #B8B8D0; color: #fff; }
+.fairy    { background-color: #EE99AC; color: #fff; }
 
 /* Hover Effect */
 .attack-btn:hover {
