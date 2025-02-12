@@ -1,4 +1,4 @@
-class Pokedex {
+export class Pokedex {
     static async getRandomPokemon() {
         const response = await fetch("https://pokeapi.co/api/v2/pokemon/?limit=920");
         const data = await response.json();
@@ -38,8 +38,23 @@ class Pokedex {
             .sort(() => Math.random() - 0.5) // Mezclar los movimientos
             .slice(0, 4); // Tomar los primeros 4
     
+        // Obtener tipos del Pokémon
+        const types = data.types.map(typeInfo => typeInfo.type.name);
+    
+        // Obtener estadísticas base (HP, Ataque, Defensa, Ataque Especial, Defensa Especial, Velocidad)
+        const stats = {
+            hp: data.stats.find(stat => stat.stat.name === "hp").base_stat,
+            attack: data.stats.find(stat => stat.stat.name === "attack").base_stat,
+            defense: data.stats.find(stat => stat.stat.name === "defense").base_stat,
+            specialAttack: data.stats.find(stat => stat.stat.name === "special-attack").base_stat,
+            specialDefense: data.stats.find(stat => stat.stat.name === "special-defense").base_stat,
+            speed: data.stats.find(stat => stat.stat.name === "speed").base_stat
+        };
+    
         return {
             name: data.name,
+            types: types,
+            stats: stats,
             moves: selectedMoves,
             images: {
                 front: data.sprites.other["showdown"].front_default,
@@ -47,6 +62,5 @@ class Pokedex {
             }
         };
     }
+    
 };
-
-export { Pokedex };
