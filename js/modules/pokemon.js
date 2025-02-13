@@ -5,6 +5,7 @@ import { TypeFactory } from "./type.js";
 
 export class Pokemon {
 	static MAX_MOVES = 4;
+	static CRIT_MULTIPLIER = 1.5;
 	
 	constructor(name, moves, types, images, hp, attack, defense, spAttack, spDefense, speed) {
 		this._name = name;
@@ -35,36 +36,59 @@ export class Pokemon {
 	}
 
 	attack(target, move) {
+		// Calculamos si el golpe es crítico antes de calcular el daño
+		const isCritical = this.calculateCriticalHit() // 4.17% de probabilidad
+
+		const damage = this.calculateDamage(target, move, isCritical);
+		target.decrementHealth(damage);
+
+		const effectiveness = move.type.calculateEffectiveness(target._types);
+		const stab = this.calculateSTAB(move, this);
+
+		console.log(
+			`${capitalizeFirstLetter(this._name)} ataca a ${capitalizeFirstLetter(target._name)} con un ataque de tipo ${move.type.name} y causa ${damage} de daño (x${effectiveness} efectividad, x${stab} STAB)${isCritical ? " ¡GOLPE CRÍTICO!" : ""}`
+		);
+	}
+
+	calculateDamage(target, move, isCritical = false) {
 		const attackType = move.type;
 		let attackerAttack = 0;
 		let defenderDefense = 0;
 
-		if (move.category == Category.PHYSICAL) {
-			attackerAttack = target.stats.attack;
+		if (move.category === Category.PHYSICAL) {
+			attackerAttack = this.stats.attack;
 			defenderDefense = target.stats.defense;
-		} 
-		else if (move.category == Category.SPECIAL) {
-			attackerAttack = target.stats.specialAttack;
+		} else if (move.category === Category.SPECIAL) {
+			attackerAttack = this.stats.specialAttack;
 			defenderDefense = target.stats.specialDefense;
 		}
+
 		const attackerMovePower = move.power;
 		const attackerLevel = this._level;
-		const effectiveness = attackType.calculateEffectiveness(target.types);
+		const effectiveness = attackType.calculateEffectiveness(target._types);
+		const stab = this.calculateSTAB(move, this);
+		const criticalMultiplier = isCritical ? Pokemon.CRIT_MULTIPLIER : 1; // Aplicar golpe crítico
 
-		// Fórmula de Daño
-		const damage = Math.floor(
-			((2 * attackerLevel / 5 + 2) * attackerMovePower * (attackerAttack / defenderDefense)) / 50 + 2
+		// Fórmula de daño con crítico aplicado correctamente
+		return Math.floor(
+			(((2 * attackerLevel / 5 + 2) * attackerMovePower * (attackerAttack / defenderDefense)) / 50 + 2)
+			* effectiveness
+			* stab
+			* criticalMultiplier
 		);
+	}
 
-		// Calcular daño por la efectividad
-		const totalDamage = damage * effectiveness;
 
-		console.log(
-			`${capitalizeFirstLetter(this._name)} ataca a ${capitalizeFirstLetter(target.name)} con un ataque de tipo ${attackType.name} y causa ${totalDamage} de daño (x${effectiveness} efectividad)`
-		);
-		
-		target.decrementHealth(totalDamage);
-    }
+	calculateSTAB(move, pokemon) {
+		const STAB_MULTIPLIER = 1.5;
+		return pokemon._types.some(type => type.name === move.type.name) ? STAB_MULTIPLIER : 1;
+	}
+
+	calculateCriticalHit() {
+		// Genera un número entre 0 y 99.9999, y si es menor que 4.17, ocurre un golpe crítico.
+		const critChance = 4.17; // 4.17% de probabilidad de crítico
+		return Math.random() * 100 < critChance
+	}
 	
 	getMove(index) {
 		return this._moves[index];
