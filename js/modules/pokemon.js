@@ -1,5 +1,5 @@
 import { capitalizeFirstLetter } from "../utils.js";
-import { Move } from "./move.js";
+import { Category, Move } from "./move.js";
 import { Stats } from "./stats.js";
 import { TypeFactory } from "./type.js";
 
@@ -36,9 +36,18 @@ export class Pokemon {
 
 	attack(target, move) {
 		const attackType = move.type;
-		const attackerAttack = this.stats.attack;
+		let attackerAttack = 0;
+		let defenderDefense = 0;
+
+		if (move.category == Category.PHYSICAL) {
+			attackerAttack = target.stats.attack;
+			defenderDefense = target.stats.defense;
+		} 
+		else if (move.category == Category.SPECIAL) {
+			attackerAttack = target.stats.specialAttack;
+			defenderDefense = target.stats.specialDefense;
+		}
 		const attackerMovePower = move.power;
-		const defenderDefense = target.stats.defense;
 		const attackerLevel = this._level;
 		const effectiveness = attackType.calculateEffectiveness(target.types);
 
