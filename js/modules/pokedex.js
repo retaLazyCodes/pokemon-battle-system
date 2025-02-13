@@ -1,26 +1,30 @@
 export class Pokedex {
+    static POKEMON_LIMIT = 920;
+
     static async getRandomPokemon() {
-        const response = await fetch("https://pokeapi.co/api/v2/pokemon/?limit=920");
-        const data = await response.json();
-        
-        const randomPokemon = data.results[Math.floor(Math.random() * data.results.length)];
-        
-        console.log(`Pokémon seleccionado: ${randomPokemon.name} - ${randomPokemon.url}`);
-        return {
-            name: randomPokemon.name,
-            url: randomPokemon.url
+        let validPokemon = null;
+
+        while (!validPokemon) {
+            const randomId = Math.floor(Math.random() * Pokedex.POKEMON_LIMIT) + 1; // ID aleatorio entre 1 y 920
+            const pokemonDetails = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}/`).then(res => res.json());
+
+            if (pokemonDetails.moves.length >= 10) {
+                validPokemon = await Pokedex.#formatPokemonDetails(pokemonDetails);
+                console.log(`Pokémon seleccionado: ${validPokemon.name} https://pokeapi.co/api/v2/pokemon/${validPokemon.id}`);
+            } else {
+                console.log(`Descartado: ${pokemonDetails.name} (tiene ${pokemonDetails.moves.length} movimientos)`);
+            }
         }
+
+        return validPokemon;
     }
 
-    static async getPokemonDetails(pokemonUrl) {
-        const response = await fetch(pokemonUrl);
-        const data = await response.json();
-    
+    static async #formatPokemonDetails(data) {
         // Obtener tipos del Pokémon
         const types = data.types.map(typeInfo => typeInfo.type.name);
         
         const selectedMoves = await Pokedex.#getPokemonMoves(data, types);
-    
+
         // Obtener estadísticas base (HP, Ataque, Defensa, Ataque Especial, Defensa Especial, Velocidad)
         const stats = {
             hp: data.stats.find(stat => stat.stat.name === "hp").base_stat,
@@ -30,8 +34,9 @@ export class Pokedex {
             specialDefense: data.stats.find(stat => stat.stat.name === "special-defense").base_stat,
             speed: data.stats.find(stat => stat.stat.name === "speed").base_stat
         };
-    
+
         return {
+            id: data.id,
             name: data.name,
             types: types,
             stats: stats,

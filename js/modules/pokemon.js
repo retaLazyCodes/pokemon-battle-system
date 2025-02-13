@@ -5,17 +5,21 @@ import { TypeFactory } from "./type.js";
 
 export class Pokemon {
 	static MAX_MOVES = 4;
-	static CRIT_MULTIPLIER = 1.5;
 	
 	constructor(name, moves, types, images, hp, attack, defense, spAttack, spDefense, speed) {
 		this._name = name;
 		this._level = 50;
-		this._health = 100;
 		this._images = images;
+		
+		// Stats con valores reales calculados
 		this.stats = new Stats(
 			hp, attack, defense,
-			spAttack, spDefense, speed
-		)
+			spAttack, spDefense,
+			speed, this._level
+		);
+
+		// HP actual al iniciar la batalla
+		this._currentHealth = this.stats.hp;
 		
 		this._types = [];
 		this._moves = [];
@@ -31,8 +35,12 @@ export class Pokemon {
 		}
 	}
 
+	calculateMaxHP(baseHP) {
+		return Math.floor(((2 * baseHP * this._level) / 100) + this._level + 10);
+	}
+
 	decrementHealth(damage) {
-		this._health -= damage;
+		this._currentHealth = Math.max(0, this._currentHealth - damage);
 	}
 
 	attack(target, move) {
@@ -63,13 +71,14 @@ export class Pokemon {
 			defenderDefense = target.stats.specialDefense;
 		}
 
+		const CRIT_MULTIPLIER = 1.5;
 		const attackerMovePower = move.power;
 		const attackerLevel = this._level;
 		const effectiveness = attackType.calculateEffectiveness(target._types);
 		const stab = this.calculateSTAB(move, this);
-		const criticalMultiplier = isCritical ? Pokemon.CRIT_MULTIPLIER : 1; // Aplicar golpe crítico
-
-		// Fórmula de daño con crítico aplicado correctamente
+		const criticalMultiplier = isCritical ? CRIT_MULTIPLIER : 1; // Aplicar golpe crítico
+		
+		// Fórmula de calculo de daño
 		return Math.floor(
 			(((2 * attackerLevel / 5 + 2) * attackerMovePower * (attackerAttack / defenderDefense)) / 50 + 2)
 			* effectiveness
@@ -98,8 +107,8 @@ export class Pokemon {
 		return this._name;
 	}
 
-	get health() {
-		return this._health;
+	get currentHealth() {
+		return this._currentHealth;
 	}
 
 	get moves() {

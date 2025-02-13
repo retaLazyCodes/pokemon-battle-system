@@ -20,7 +20,6 @@ class Type {
                 effectiveness *= 0.5; // No muy efectivo
             }
         }
-        console.log(effectiveness)
         return effectiveness;
     }
 }

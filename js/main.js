@@ -14,11 +14,8 @@ function attack(event, attacker, defender) {
 	attacker.attack(defender, move)
 }
 
-const randomPokemon1 = await Pokedex.getRandomPokemon()
-const randomPokemon2 = await Pokedex.getRandomPokemon()
-
-const playerPokemon = await Pokedex.getPokemonDetails(randomPokemon1.url);
-const enemyPokemon = await Pokedex.getPokemonDetails(randomPokemon2.url);
+const playerPokemon = await Pokedex.getRandomPokemon()
+const enemyPokemon = await Pokedex.getRandomPokemon()
 
 const poke1 = new Pokemon(
 	playerPokemon.name,
