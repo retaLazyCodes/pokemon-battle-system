@@ -58,9 +58,6 @@ export class Battle {
 
             if (secondAttacker.activePokemon.currentHealth <= 0) {
                 console.log(`${firstAttacker.name} ha ganado el combate`);
-                setTimeout(()=>{
-                    window.alert("PERDISTE TOPOO!!")
-                }, 1000);
                 return;
             }
 
@@ -78,9 +75,6 @@ export class Battle {
 
             if (firstAttacker.activePokemon.currentHealth <= 0) {
                 console.log(`${secondAttacker.name} ha ganado el combate`);
-                setTimeout(()=>{
-                    window.alert("PERDISTE TOPOO!!")
-                }, 1000);
                 return;
             }
         }
