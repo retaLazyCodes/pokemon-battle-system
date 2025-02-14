@@ -1,62 +1,69 @@
 import { Pokedex } from './modules/pokedex.js';
 import { Pokemon } from './modules/pokemon.js';
+import { Player } from './modules/player.js';
+import { Battle } from './modules/battle.js';
+import { updateUI } from './utils.js';
 
-console.log('working');
+async function startGame() {
+    console.log('Iniciando juego...');
 
-let turn = 0;
+    const playerPokemonData = await Pokedex.getRandomPokemon();
+    const enemyPokemonData = await Pokedex.getRandomPokemon();
 
+    const playerPokemon = new Pokemon(
+        playerPokemonData.name,
+        playerPokemonData.moves,
+        playerPokemonData.types,
+        playerPokemonData.images,
+        playerPokemonData.stats.hp,
+        playerPokemonData.stats.attack,
+        playerPokemonData.stats.defense,
+        playerPokemonData.stats.specialAttack,
+        playerPokemonData.stats.specialDefense,
+        playerPokemonData.stats.speed
+    );
 
-function attack(event, attacker, defender) {
-	const selectedMove = event.target.id.split("attack")[1]
-	const moveIndex = parseInt(selectedMove) -1;
-	const move = attacker.getMove(moveIndex)
-	console.log(`attacked with attack ${selectedMove}`);
-	attacker.attack(defender, move)
+    const enemyPokemon = new Pokemon(
+        enemyPokemonData.name,
+        enemyPokemonData.moves,
+        enemyPokemonData.types,
+        enemyPokemonData.images,
+        enemyPokemonData.stats.hp,
+        enemyPokemonData.stats.attack,
+        enemyPokemonData.stats.defense,
+        enemyPokemonData.stats.specialAttack,
+        enemyPokemonData.stats.specialDefense,
+        enemyPokemonData.stats.speed
+    );
+
+    console.log(playerPokemon);
+    console.log(enemyPokemon);
+
+    const player1 = new Player("Jugador", playerPokemon);
+    const player2 = new Player("Enemigo", enemyPokemon);
+
+    const battle = new Battle(player1, player2, updateUI);
+
+    // Renderizar Pokémon y botones
+    renderPokemon(player1.activePokemon, 'player-sprite', { frontImage: false });
+    renderPokemon(player2.activePokemon, 'enemy-sprite', { frontImage: true });
+    createAttackButtons(player1.activePokemon.moves);
+
+    // Iniciar la batalla
+    await battle.start();
 }
 
-const playerPokemon = await Pokedex.getRandomPokemon()
-const enemyPokemon = await Pokedex.getRandomPokemon()
-
-const poke1 = new Pokemon(
-	playerPokemon.name,
-	playerPokemon.moves,
-	playerPokemon.types,
-	playerPokemon.images,
-	playerPokemon.stats.hp,
-	playerPokemon.stats.attack,
-	playerPokemon.stats.defense,
-	playerPokemon.stats.specialAttack,
-	playerPokemon.stats.specialDefense,
-	playerPokemon.stats.speed
-)
-const poke2 = new Pokemon(
-	enemyPokemon.name,
-	enemyPokemon.moves,
-	enemyPokemon.types,
-	enemyPokemon.images,
-	enemyPokemon.stats.hp,
-	enemyPokemon.stats.attack,
-	enemyPokemon.stats.defense,
-	enemyPokemon.stats.specialAttack,
-	enemyPokemon.stats.specialDefense,
-	enemyPokemon.stats.speed
-)
-console.log(poke1)
-console.log(poke2)
-
-function renderPokemon(pokemon, elementId, { frontImage = false } ) {
-	const imgElement = document.getElementById(elementId);
-	if (frontImage) {
-		imgElement.src = pokemon.images.front;
-	} else {
-		imgElement.src = pokemon.images.back;
-	}
-	imgElement.alt = `Pokémon ${pokemon.name}`;
+// Rederizar los Pokémon
+function renderPokemon(pokemon, elementId, { frontImage = false }) {
+    const imgElement = document.getElementById(elementId);
+    imgElement.src = frontImage ? pokemon.images.front : pokemon.images.back;
+    imgElement.alt = `Pokémon ${pokemon.name}`;
 }
 
+// Crear botones de ataques
 function createAttackButtons(moves) {
     const attackSection = document.querySelector(".attack-buttons");
-    attackSection.innerHTML = ""; // Limpiar contenido previo
+    attackSection.innerHTML = "";
 
     moves.forEach((move, index) => {
         const button = document.createElement("button");
@@ -67,15 +74,5 @@ function createAttackButtons(moves) {
     });
 }
 
-// Renderizar ambos Pokémon
-renderPokemon(playerPokemon, 'player-sprite', { frontImage: false });
-renderPokemon(enemyPokemon, 'enemy-sprite', { frontImage: true });
-
-// Rederizar botones de movimientos
-createAttackButtons(playerPokemon.moves);
-
-for (let i=1; i <= Pokemon.MAX_MOVES; i++) {
-	document.getElementById(`attack${i}`).addEventListener('click', (event) => {
-		attack(event, poke1, poke2);
-	});
-}
+// Ejecutar la función cuando la página cargue
+document.addEventListener("DOMContentLoaded", startGame);

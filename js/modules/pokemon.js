@@ -118,5 +118,13 @@ export class Pokemon {
 	get types() {
 		return this._types;
 	}
+	
+	get speed() {
+		return this.stats.speed;
+	}
+
+	get images() {
+		return this._images;
+	}
 };
 
