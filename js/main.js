@@ -2,7 +2,7 @@ import { Pokedex } from './modules/pokedex.js';
 import { Pokemon } from './modules/pokemon.js';
 import { Player } from './modules/player.js';
 import { Battle } from './modules/battle.js';
-import { updateUI } from './utils.js';
+import { updateHealthBar } from './utils.js';
 
 async function startGame() {
     console.log('Iniciando juego...');
@@ -42,7 +42,7 @@ async function startGame() {
     const player1 = new Player("Jugador", playerPokemon);
     const player2 = new Player("Enemigo", enemyPokemon);
 
-    const battle = new Battle(player1, player2, updateUI);
+    const battle = new Battle(player1, player2, updateHealthBar);
 
     // Renderizar Pokémon y botones
     renderPokemon(player1.activePokemon, 'player-sprite', { frontImage: false });

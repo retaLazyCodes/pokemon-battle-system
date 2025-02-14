@@ -13,18 +13,31 @@
             <img id="player-sprite" src="" alt="Pokémon del Jugador">
         </div>
 
-        <!-- Pokémon del enemigo -->
-        <div id="enemy-pokemon" class="pokemon enemy-pokemon">
-             <img id="enemy-sprite" src="" alt="Pokémon del Jugador">
+        <!-- Barra de salud del jugador -->
+        <div id="player-hp-bar" class="hp-bar">
+            <div id="player-hp" class="hp hp-full"></div> <!-- Aquí irá la clase dinámica -->
+            <div id="player-hp-text" class="hptext">100%</div> <!-- Texto de porcentaje -->
         </div>
 
+        <!-- Pokémon del enemigo -->
+        <div id="enemy-pokemon" class="pokemon enemy-pokemon">
+            <img id="enemy-sprite" src="" alt="Pokémon del Enemigo">
+        </div>
+
+        <!-- Barra de salud del enemigo -->
+        <div id="enemy-hp-bar" class="hp-bar">
+            <div id="enemy-hp" class="hp hp-full"></div> <!-- Aquí irá la clase dinámica -->
+            <div id="enemy-hp-text" class="hptext">100%</div> <!-- Texto de porcentaje -->
+        </div>
     </div>
 
     <div class="attack-section">
         <h3 class="attack-title">Attack</h3>
-        <div class="attack-buttons"></div>
+        <div class="attack-buttons">
+            <!-- Botones de ataque, se pueden agregar dinámicamente desde JavaScript -->
+        </div>
     </div>
 
+    <script type="module" src="./js/main.js"></script>
 </body>
-<script type="module" src="./js/main.js"></script>
 </html>

@@ -18,7 +18,6 @@ export class Pokemon {
 			speed, this._level
 		);
 
-		// HP actual al iniciar la batalla
 		this._currentHealth = this.stats.hp;
 		
 		this._types = [];
@@ -75,7 +74,7 @@ export class Pokemon {
 		const attackerMovePower = move.power;
 		const attackerLevel = this._level;
 		const effectiveness = attackType.calculateEffectiveness(target._types);
-		const stab = this.calculateSTAB(move, this);
+		const stab = this.calculateSTAB(move);
 		const criticalMultiplier = isCritical ? CRIT_MULTIPLIER : 1; // Aplicar golpe crítico
 		
 		// Fórmula de calculo de daño
@@ -87,16 +86,21 @@ export class Pokemon {
 		);
 	}
 
-
-	calculateSTAB(move, pokemon) {
+	calculateSTAB(move) {
 		const STAB_MULTIPLIER = 1.5;
-		return pokemon._types.some(type => type.name === move.type.name) ? STAB_MULTIPLIER : 1;
+		return this._types.some(type => type.name === move.type.name) ? STAB_MULTIPLIER : 1;
 	}
 
 	calculateCriticalHit() {
 		// Genera un número entre 0 y 99.9999, y si es menor que 4.17, ocurre un golpe crítico.
-		const critChance = 4.17; // 4.17% de probabilidad de crítico
+		const critChance = 4.17;
 		return Math.random() * 100 < critChance
+	}
+
+	getHPPercentage() {
+		return Math.round((
+			this.currentHealth / this.maxHealth
+		) * 100);
 	}
 	
 	getMove(index) {
@@ -105,6 +109,10 @@ export class Pokemon {
 
 	get name() {
 		return this._name;
+	}
+
+	get maxHealth() {
+		return this.stats.hp
 	}
 
 	get currentHealth() {
