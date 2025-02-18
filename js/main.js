@@ -76,3 +76,6 @@ function createAttackButtons(moves) {
 
 // Ejecutar la función cuando la página cargue
 document.addEventListener("DOMContentLoaded", startGame);
+
+import { renderSwitchButtons } from './testRenderSwitchButtons.js';
+document.addEventListener("DOMContentLoaded", renderSwitchButtons);
