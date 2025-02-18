@@ -1,49 +1,149 @@
+import { Battle } from "./modules/battle.js";
+
 function capitalizeFirstLetter(word) {
     return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 }
 
+
+// Rederizar los Pokémon
+function renderPokemon(pokemon, elementId, { frontImage = false }) {
+    const imgElement = document.getElementById(elementId);
+    imgElement.src = frontImage ? pokemon.images.front : pokemon.images.back;
+    imgElement.alt = `Pokémon ${pokemon.name}`;
+}
+
+
+// Crear botones de ataques
+function createAttackButtons(moves) {
+    const attackSection = document.querySelector(".attack-buttons");
+    attackSection.innerHTML = "";
+
+    moves.forEach((move, index) => {
+        const button = document.createElement("button");
+        button.id = `attack${index + 1}`;
+        button.className = `attack-btn ${move.type.name.toLowerCase()}`;
+        button.textContent = move.name;
+        attackSection.appendChild(button);
+    });
+}
+
+
+// Función para renderizar el menú de cambio de Pokémon
+function renderSwitchMenu(player) {
+    const switchContainer = document.querySelector(".switch-buttons");
+    switchContainer.innerHTML = ""; // Limpiar botones previos
+
+    player.team.forEach((pokemon, index) => {
+        const button = document.createElement("div");
+        button.classList.add("switch-pokemon");
+
+        // Imagen del Pokémon
+        const img = document.createElement("img");
+        img.src = pokemon.images.icon;
+        img.alt = pokemon.name;
+
+        // Nombre del Pokémon
+        const name = document.createElement("div");
+        name.classList.add("pokemon-name");
+        name.textContent = pokemon.name;
+
+        // Contenedor de la barra de salud
+        const hpBarContainer = document.createElement("div");
+        hpBarContainer.classList.add("hp-bar");
+
+        // Barra de salud interna
+        const hpBar = document.createElement("div");
+        hpBar.classList.add("hp");
+        const hpPercentage = (pokemon.currentHealth / pokemon.maxHealth) * 100;
+        hpBar.style.width = `${hpPercentage}%`; // Ajusta la barra según la vida
+
+        // Agregar elementos al contenedor
+        hpBarContainer.appendChild(hpBar);
+        button.appendChild(img);
+        button.appendChild(name);
+        button.appendChild(hpBarContainer);
+
+        // Deshabilitar si el Pokémon está debilitado o ya es el activo
+        if (pokemon.currentHealth <= 0 || index === player.activeIndex) {
+            button.classList.add("disabled");
+        } else {
+            // Agregar evento de cambio de Pokémon
+            button.addEventListener("click", () => {
+                onPokemonSwitch(player, index);
+            });
+        }
+
+        switchContainer.appendChild(button);
+    });
+}
+
+
+// Función de cambio de Pokémon
+function onPokemonSwitch(player, index) {
+    player.switchPokemon(index);
+    renderPokemon(player.activePokemon, "player-sprite", { frontImage: false });
+    createAttackButtons(player.activePokemon.moves);
+    renderSwitchMenu(player); // Volver a renderizar el menú
+    updateHealthBar(player.activePokemon.getHPPercentage(), null);
+
+    // Aquí aseguramos que la batalla vea el cambio
+    const battle = Battle.getInstance();
+    battle.player1.activePokemon = player.activePokemon;
+    battle.player1.activeIndex = index;
+
+    // Reanudar la batalla después del cambio
+    battle.resume();
+}
+
+
 // Función para actualizar la barra de salud
 function updateHealthBar(playerHP, enemyHP) {
-    const playerHPBar = document.getElementById("player-hp");
-    const enemyHPBar = document.getElementById("enemy-hp");
-    const playerHPText = document.getElementById("player-hp-text");
-    const enemyHPText = document.getElementById("enemy-hp-text");
+    console.log(playerHP)
+    console.log(enemyHP)
+    if (playerHP != null) {
+        const playerHPBar = document.getElementById("player-hp");
+        const playerHPText = document.getElementById("player-hp-text");
 
-    // Actualizar el porcentaje de salud y las barras
-    playerHPBar.style.width = `${playerHP}%`;
-    enemyHPBar.style.width = `${enemyHP}%`;
+        // Actualizar el porcentaje de salud y las barras
+        playerHPBar.style.width = `${playerHP}%`;
+        playerHPText.textContent = `${playerHP}%`;
 
-    playerHPText.textContent = `${playerHP}%`;
-    enemyHPText.textContent = `${enemyHP}%`;
+        // Cambiar clase según el porcentaje de salud
+        playerHPBar.className = 'hp'; // Reiniciar clase
 
-    // Cambiar clase según el porcentaje de salud
-    playerHPBar.className = 'hp'; // Reiniciar clase
-
-    if (playerHP > 75) {
-        playerHPBar.classList.add('hp-full'); // Salud alta (verde)
-    } else if (playerHP > 50) {
-        playerHPBar.classList.add('hp-high'); // Salud media-alta (verde claro)
-    } else if (playerHP > 25) {
-        playerHPBar.classList.add('hp-medium'); // Salud media (amarillo)
-    } else if (playerHP > 10) {
-        playerHPBar.classList.add('hp-low'); // Salud baja (naranja)
-    } else {
-        playerHPBar.classList.add('hp-very-low'); // Salud crítica (rojo)
+        if (playerHP > 75) {
+            playerHPBar.classList.add('hp-full'); // Salud alta (verde)
+        } else if (playerHP > 50) {
+            playerHPBar.classList.add('hp-high'); // Salud media-alta (verde claro)
+        } else if (playerHP > 25) {
+            playerHPBar.classList.add('hp-medium'); // Salud media (amarillo)
+        } else if (playerHP > 10) {
+            playerHPBar.classList.add('hp-low'); // Salud baja (naranja)
+        } else {
+            playerHPBar.classList.add('hp-very-low'); // Salud crítica (rojo)
+        }
     }
 
-    // Lo mismo para el enemigo
-    enemyHPBar.className = 'hp'; // Reiniciar clase
+    if (enemyHP != null) {
+        const enemyHPBar = document.getElementById("enemy-hp");
+        const enemyHPText = document.getElementById("enemy-hp-text");
+        
+        enemyHPBar.style.width = `${enemyHP}%`;
+        enemyHPText.textContent = `${enemyHP}%`;
 
-    if (enemyHP > 75) {
-        enemyHPBar.classList.add('hp-full');
-    } else if (enemyHP > 50) {
-        enemyHPBar.classList.add('hp-high');
-    } else if (enemyHP > 25) {
-        enemyHPBar.classList.add('hp-medium');
-    } else if (enemyHP > 10) {
-        enemyHPBar.classList.add('hp-low');
-    } else {
-        enemyHPBar.classList.add('hp-very-low');
+        enemyHPBar.className = 'hp'; // Reiniciar clase
+
+        if (enemyHP > 75) {
+            enemyHPBar.classList.add('hp-full');
+        } else if (enemyHP > 50) {
+            enemyHPBar.classList.add('hp-high');
+        } else if (enemyHP > 25) {
+            enemyHPBar.classList.add('hp-medium');
+        } else if (enemyHP > 10) {
+            enemyHPBar.classList.add('hp-low');
+        } else {
+            enemyHPBar.classList.add('hp-very-low');
+        }
     }
 }
 
@@ -54,4 +154,10 @@ updateHealthBar(playerHP, enemyHP);
 
 
 
-export { capitalizeFirstLetter, updateHealthBar }
+export { 
+    capitalizeFirstLetter,
+    updateHealthBar,
+    renderSwitchMenu,
+    renderPokemon,
+    createAttackButtons 
+}

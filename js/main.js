@@ -2,80 +2,52 @@ import { Pokedex } from './modules/pokedex.js';
 import { Pokemon } from './modules/pokemon.js';
 import { Player } from './modules/player.js';
 import { Battle } from './modules/battle.js';
-import { updateHealthBar } from './utils.js';
+import { updateHealthBar, renderSwitchMenu, renderPokemon, createAttackButtons } from './utils.js';
 
 async function startGame() {
     console.log('Iniciando juego...');
 
-    const playerPokemonData = await Pokedex.getRandomPokemon();
-    const enemyPokemonData = await Pokedex.getRandomPokemon();
+    // Generar 6 Pokémon aleatorios para cada jugador
+    const playerTeam = await generateTeam();
+    const enemyTeam = await generateTeam();
 
-    const playerPokemon = new Pokemon(
-        playerPokemonData.name,
-        playerPokemonData.moves,
-        playerPokemonData.types,
-        playerPokemonData.images,
-        playerPokemonData.stats.hp,
-        playerPokemonData.stats.attack,
-        playerPokemonData.stats.defense,
-        playerPokemonData.stats.specialAttack,
-        playerPokemonData.stats.specialDefense,
-        playerPokemonData.stats.speed
-    );
+    console.log("Equipo del jugador:", playerTeam);
+    console.log("Equipo del enemigo:", enemyTeam);
 
-    const enemyPokemon = new Pokemon(
-        enemyPokemonData.name,
-        enemyPokemonData.moves,
-        enemyPokemonData.types,
-        enemyPokemonData.images,
-        enemyPokemonData.stats.hp,
-        enemyPokemonData.stats.attack,
-        enemyPokemonData.stats.defense,
-        enemyPokemonData.stats.specialAttack,
-        enemyPokemonData.stats.specialDefense,
-        enemyPokemonData.stats.speed
-    );
+    const player1 = new Player("Jugador", playerTeam);
+    const player2 = new Player("Enemigo", enemyTeam);
+    
+    console.log(player1.activePokemon)
+    console.log(player2.activePokemon)
 
-    console.log(playerPokemon);
-    console.log(enemyPokemon);
-
-    const player1 = new Player("Jugador", playerPokemon);
-    const player2 = new Player("Enemigo", enemyPokemon);
-
-    const battle = new Battle(player1, player2, updateHealthBar);
+    const battle = Battle.getInstance(player1, player2, updateHealthBar);
 
     // Renderizar Pokémon y botones
     renderPokemon(player1.activePokemon, 'player-sprite', { frontImage: false });
     renderPokemon(player2.activePokemon, 'enemy-sprite', { frontImage: true });
     createAttackButtons(player1.activePokemon.moves);
 
+    // Renderizar equipo para cambiar Pokémon
+    renderSwitchMenu(player1);
+
     // Iniciar la batalla
     await battle.start();
 }
 
-// Rederizar los Pokémon
-function renderPokemon(pokemon, elementId, { frontImage = false }) {
-    const imgElement = document.getElementById(elementId);
-    imgElement.src = frontImage ? pokemon.images.front : pokemon.images.back;
-    imgElement.alt = `Pokémon ${pokemon.name}`;
-}
-
-// Crear botones de ataques
-function createAttackButtons(moves) {
-    const attackSection = document.querySelector(".attack-buttons");
-    attackSection.innerHTML = "";
-
-    moves.forEach((move, index) => {
-        const button = document.createElement("button");
-        button.id = `attack${index + 1}`;
-        button.className = `attack-btn ${move.type.name.toLowerCase()}`;
-        button.textContent = move.name;
-        attackSection.appendChild(button);
-    });
+// Generar un equipo de 6 Pokémon
+async function generateTeam() {
+    const team = [];
+    for (let i = 0; i < 6; i++) {
+        const data = await Pokedex.getRandomPokemon();
+        const pokemon = new Pokemon(
+            data.name, data.moves, data.types, data.images,
+            data.stats.hp, data.stats.attack, data.stats.defense,
+            data.stats.specialAttack, data.stats.specialDefense, data.stats.speed
+        );
+        team.push(pokemon);
+    }
+    return team;
 }
 
 // Ejecutar la función cuando la página cargue
 document.addEventListener("DOMContentLoaded", startGame);
-
-import { renderSwitchButtons } from './testRenderSwitchButtons.js';
-document.addEventListener("DOMContentLoaded", renderSwitchButtons);

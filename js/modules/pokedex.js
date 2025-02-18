@@ -35,6 +35,8 @@ export class Pokedex {
             speed: data.stats.find(stat => stat.stat.name === "speed").base_stat
         };
 
+        const DEFAULT_ICON = "/assets/img/default-icon.png"
+
         return {
             id: data.id,
             name: data.name,
@@ -43,7 +45,8 @@ export class Pokedex {
             moves: selectedMoves,
             images: {
                 front: data.sprites.other["showdown"].front_default,
-                back: data.sprites.other["showdown"].back_default
+                back: data.sprites.other["showdown"].back_default,
+                icon: data.sprites.versions["generation-viii"].icons.front_default || DEFAULT_ICON
             }
         };
     }

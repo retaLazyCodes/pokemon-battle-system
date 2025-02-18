@@ -1,13 +1,32 @@
 export class Battle {
+    // Almacena la instancia única de Battle
+    static instance = null;
+
     constructor(player1, player2, updateUI) {
+        if (Battle.instance) {
+            throw new Error("Solo puede haber una instancia de Battle");
+        }
+
         this.player1 = player1;
         this.player2 = player2;
         this.updateUI = updateUI;
+
+        Battle.instance = this;
+    }
+
+    static getInstance(player1, player2, updateUI) {
+        // Si no existe una instancia, la crea
+        if (!Battle.instance) {
+            Battle.instance = new Battle(player1, player2, updateUI);
+        }
+        return Battle.instance;
+    }
+
+    resume() {
+        this.start();
     }
 
     async start() {
-        console.log("¡La batalla ha comenzado!");
-
         while (this.player1.activePokemon.currentHealth > 0 && this.player2.activePokemon.currentHealth > 0) {
             console.log(`Es el turno de ${this.player1.name}`);
 

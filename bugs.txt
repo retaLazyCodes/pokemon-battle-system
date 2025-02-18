@@ -1,0 +1,2 @@
+- Si cambio de Pokémon, el rival no me ataca en ese turno
+- Cuando debilito al rival, éste no cambia de Pokémon
