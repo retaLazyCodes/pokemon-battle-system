@@ -80,19 +80,17 @@ function renderSwitchMenu(player) {
 
 // Función de cambio de Pokémon
 function onPokemonSwitch(player, index) {
+    const isPokemonFainted = player.activePokemon.currentHealth === 0;
+
     player.switchPokemon(index);
     renderPokemon(player.activePokemon, "player-sprite", { frontImage: false });
     createAttackButtons(player.activePokemon.moves);
     renderSwitchMenu(player); // Volver a renderizar el menú
     updateHealthBar(player.activePokemon.getHPPercentage(), null);
 
-    // Aquí aseguramos que la batalla vea el cambio
-    const battle = Battle.getInstance();
-    battle.player1.activePokemon = player.activePokemon;
-    battle.player1.activeIndex = index;
-
     // Reanudar la batalla después del cambio
-    battle.resume();
+    const battle = Battle.getInstance();
+    battle.resume(isPokemonFainted);
 }
 
 

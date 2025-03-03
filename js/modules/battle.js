@@ -22,8 +22,14 @@ export class Battle {
         return Battle.instance;
     }
 
-    resume() {
-        this.start({ fromSwitch: true });
+    resume(isPokemonFainted) {
+        const shouldContinueBattle = !isPokemonFainted;
+
+        if (shouldContinueBattle) {
+            this.start({ fromSwitch: true }); // Solo el rival se mueve
+        } else {
+            this.start(); // Reinicia la batalla
+        }
     }
 
     async start({ fromSwitch = false } = {}) {
