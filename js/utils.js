@@ -4,14 +4,40 @@ function capitalizeFirstLetter(word) {
     return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 }
 
-
-// Rederizar los Pokémon
-function renderPokemon(pokemon, elementId, { frontImage = false }) {
-    const imgElement = document.getElementById(elementId);
-    imgElement.src = frontImage ? pokemon.images.front : pokemon.images.back;
-    imgElement.alt = `Pokémon ${pokemon.name}`;
+function titleCase(str) {
+    return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
 }
 
+// Rederizar los Pokémon
+function renderPokemon(pokemon, elementIdSprite, elementIdName, { frontImage = false }) {
+    const imgElement = document.getElementById(elementIdSprite);
+    const divElement = document.getElementById(elementIdName);
+    console.log(imgElement)
+    console.log(divElement)
+    imgElement.src = frontImage ? pokemon.images.front : pokemon.images.back;
+    imgElement.alt = `Pokémon ${pokemon.name}`;
+    divElement.textContent = pokemon.name;
+}
+
+// Mostrar Pokémon revelados por los jugadores
+function displayTeams(playerTeam, enemyTeam, activePokemon) {
+    const playerTeamContainer = document.querySelector(".player-team");
+    const enemyTeamContainer = document.querySelector(".enemy-team");
+
+    if (playerTeam) {
+        console.log(activePokemon)
+        playerTeamContainer.innerHTML = playerTeam.map(poke => 
+            `<img src="${poke.images.icon}" class="${poke === activePokemon ? 'active' : ''}">`
+        ).join("");
+    }
+    if (enemyTeam) {
+        enemyTeamContainer.innerHTML = enemyTeam.map(poke =>
+            poke.revealed
+            ? `<img src="${poke.images.icon}" class="revealed">` 
+            : `<span class="picon" title="Not revealed" aria-label="Not revealed"></span>`
+        ).join("");
+    }
+}
 
 // Crear botones de ataques
 function createAttackButtons(moves) {
@@ -83,7 +109,8 @@ function onPokemonSwitch(player, index) {
     const isPokemonFainted = player.activePokemon.currentHealth === 0;
 
     player.switchPokemon(index);
-    renderPokemon(player.activePokemon, "player-sprite", { frontImage: false });
+    renderPokemon(player.activePokemon, 'player-sprite', 'player-name', { frontImage: false });
+    displayTeams(player.team, null, player.activePokemon)
     createAttackButtons(player.activePokemon.moves);
     renderSwitchMenu(player); // Volver a renderizar el menú
     updateHealthBar(player.activePokemon.getHPPercentage(), null);
@@ -154,8 +181,10 @@ updateHealthBar(playerHP, enemyHP);
 
 export { 
     capitalizeFirstLetter,
+    titleCase,
     updateHealthBar,
     renderSwitchMenu,
     renderPokemon,
-    createAttackButtons 
+    createAttackButtons,
+    displayTeams
 }

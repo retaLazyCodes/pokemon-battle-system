@@ -3,6 +3,8 @@ export class Player {
         this.name = name;
         this.team = team; // array de Pokémon
         this.activeIndex = 0; // Índice del Pokémon activo
+
+        this.team[0].revealed = true;
     }
 
     get activePokemon() {

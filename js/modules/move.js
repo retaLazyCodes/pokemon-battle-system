@@ -1,3 +1,5 @@
+import { titleCase } from "../utils.js";
+
 // Implementación de "enum"
 const Category = Object.freeze({
     PHYSICAL: "physical",
@@ -18,7 +20,7 @@ class Move {
     }
 
     get name() {
-		return this._name;
+		return titleCase(this._name);
 	}
     get power() {
 		return this._power;

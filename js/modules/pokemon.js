@@ -6,10 +6,11 @@ import { TypeFactory } from "./type.js";
 export class Pokemon {
 	static MAX_MOVES = 4;
 	
-	constructor(name, moves, types, images, hp, attack, defense, spAttack, spDefense, speed) {
+	constructor(name, moves, types, images, revealed, hp, attack, defense, spAttack, spDefense, speed) {
 		this._name = name;
 		this._level = 50;
 		this._images = images;
+		this._revealed = revealed
 		
 		// Stats con valores reales calculados
 		this.stats = new Stats(
@@ -35,6 +36,9 @@ export class Pokemon {
 	}
 
 	calculateMaxHP(baseHP) {
+		if (this._name === "Shedinja") {
+			return 1;
+		}
 		return Math.floor(((2 * baseHP * this._level) / 100) + this._level + 10);
 	}
 
@@ -53,7 +57,7 @@ export class Pokemon {
 		const stab = this.calculateSTAB(move, this);
 
 		console.log(
-			`${capitalizeFirstLetter(this._name)} ataca a ${capitalizeFirstLetter(target._name)} con un ataque de tipo ${move.type.name} y causa ${damage} de daño (x${effectiveness} efectividad, x${stab} STAB)${isCritical ? " ¡GOLPE CRÍTICO!" : ""}`
+			`${this._name} ataca a ${target._name} con un ataque de tipo ${move.type.name} y causa ${damage} de daño (x${effectiveness} efectividad, x${stab} STAB)${isCritical ? " ¡GOLPE CRÍTICO!" : ""}`
 		);
 	}
 
@@ -134,5 +138,13 @@ export class Pokemon {
 	get images() {
 		return this._images;
 	}
+
+	get revealed() {
+		return this._revealed;
+	}
+
+	set revealed(value) {
+        this._revealed = value;
+    }
 };
 

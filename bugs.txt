@@ -1,1 +1,2 @@
 - Cuando debilito al rival, éste no cambia de Pokémon
+- Algunos Pokémon, como los voladores, no se renderizan en la posición correcta

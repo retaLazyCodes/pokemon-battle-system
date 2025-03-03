@@ -8,10 +8,16 @@
 </head>
 <body>
     <div class="battle">
+        <!-- Pokémon restantes del jugador -->
+        <div class="player-team"></div>
+
         <!-- Pokémon del jugador -->
         <div id="player-pokemon" class="pokemon player-pokemon">
             <img id="player-sprite" src="" alt="Pokémon del Jugador">
         </div>
+
+        <!-- Nombre del Pokémon del jugador -->
+        <div id="player-name" class="pokemon-name">Nombre1</div>
 
         <!-- Barra de salud del jugador -->
         <div id="player-hp-bar" class="hp-bar">
@@ -24,11 +30,17 @@
             <img id="enemy-sprite" src="" alt="Pokémon del Enemigo">
         </div>
 
+        <!-- Nombre del Pokémon del enemigo -->
+        <div id="enemy-name" class="pokemon-name">Nombre2</div>
+
         <!-- Barra de salud del enemigo -->
         <div id="enemy-hp-bar" class="hp-bar">
             <div id="enemy-hp" class="hp hp-full"></div> <!-- Aquí irá la clase dinámica -->
             <div id="enemy-hp-text" class="hptext">100%</div> <!-- Texto de porcentaje -->
         </div>
+
+        <!-- Pokémon restantes del enemigo -->
+        <div class="enemy-team"></div>
     </div>
 
     <div class="attack-section">
@@ -39,7 +51,7 @@
     </div>
 
     <div class="switch-section">
-        <h3 class="switch-title">Switch Pokémon</h3>
+        <h3 class="switch-title">Switch</h3>
         <div class="switch-buttons">
             <!-- Los botones para cambiar de Pokémon se generarán dinámicamente -->
         </div>
