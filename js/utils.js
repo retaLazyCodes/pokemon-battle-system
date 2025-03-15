@@ -12,8 +12,6 @@ function titleCase(str) {
 function renderPokemon(pokemon, elementIdSprite, elementIdName, { frontImage = false }) {
     const imgElement = document.getElementById(elementIdSprite);
     const divElement = document.getElementById(elementIdName);
-    console.log(imgElement)
-    console.log(divElement)
     imgElement.src = frontImage ? pokemon.images.front : pokemon.images.back;
     imgElement.alt = `Pokémon ${pokemon.name}`;
     divElement.textContent = pokemon.name;
@@ -62,6 +60,7 @@ function renderSwitchMenu(player) {
     player.team.forEach((pokemon, index) => {
         const button = document.createElement("div");
         button.classList.add("switch-pokemon");
+        button.id = `pokemon#${index}`;
 
         // Imagen del Pokémon
         const img = document.createElement("img");
@@ -89,13 +88,15 @@ function renderSwitchMenu(player) {
         button.appendChild(name);
         button.appendChild(hpBarContainer);
 
+        const pokemonIndex = parseInt(button.id[button.id.length-1])
+
         // Deshabilitar si el Pokémon está debilitado o ya es el activo
         if (pokemon.currentHealth <= 0 || index === player.activeIndex) {
             button.classList.add("disabled");
         } else {
             // Agregar evento de cambio de Pokémon
-            button.addEventListener("click", () => {
-                onPokemonSwitch(player, index);
+            button.addEventListener("click", (event) => {
+                onPokemonSwitch(player, pokemonIndex);
             });
         }
 
