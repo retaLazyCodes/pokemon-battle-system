@@ -19,7 +19,7 @@ export class Pokemon {
 			speed, this._level
 		);
 
-		this._currentHealth = this.stats.hp;
+		this._currentHealth = this.calculateMaxHP(hp)
 		
 		this._types = [];
 		this._moves = [];
