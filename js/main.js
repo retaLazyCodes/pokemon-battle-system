@@ -42,19 +42,20 @@ async function startGame() {
     await battle.start();
 }
 
-// Generar un equipo de 6 Pokémon
+// Generar un equipo de 6 Pokémon en paralelo
 async function generateTeam({ revealTeam = false } = {}) {
-    const team = [];
-    for (let i = 0; i < 6; i++) {
-        const data = await Pokedex.getRandomPokemon();
-        const name = capitalizeFirstLetter(data.name)
-        const pokemon = new Pokemon(
+    const promises = Array.from({ length: 6 }, () => Pokedex.getRandomPokemon());
+    const teamData = await Promise.all(promises);
+
+    const team = teamData.map(data => {
+        const name = capitalizeFirstLetter(data.name);
+        return new Pokemon(
             name, data.moves, data.types, data.images, revealTeam,
             data.stats.hp, data.stats.attack, data.stats.defense,
             data.stats.specialAttack, data.stats.specialDefense, data.stats.speed
         );
-        team.push(pokemon);
-    }
+    });
+
     return team;
 }
 

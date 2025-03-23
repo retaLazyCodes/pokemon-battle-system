@@ -5,14 +5,22 @@ export class Pokedex {
         let validPokemon = null;
 
         while (!validPokemon) {
-            const randomId = Math.floor(Math.random() * Pokedex.POKEMON_LIMIT) + 1; // ID aleatorio entre 1 y 920
-            const pokemonDetails = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}/`).then(res => res.json());
+            const randomId = Math.floor(Math.random() * Pokedex.POKEMON_LIMIT) + 1;
 
-            if (pokemonDetails.moves.length >= 10) {
-                validPokemon = await Pokedex.#formatPokemonDetails(pokemonDetails);
-                console.log(`Pokémon seleccionado: ${validPokemon.name} https://pokeapi.co/api/v2/pokemon/${validPokemon.id}`);
-            } else {
-                console.log(`Descartado: ${pokemonDetails.name} (tiene ${pokemonDetails.moves.length} movimientos)`);
+            try {
+                const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}/`);
+                if (!response.ok) continue; // Si falla la llamada, intenta de nuevo
+
+                const pokemonDetails = await response.json();
+
+                if (pokemonDetails.moves.length >= 10) {
+                    validPokemon = await Pokedex.#formatPokemonDetails(pokemonDetails);
+                    console.log(`Pokémon seleccionado: ${validPokemon.name} https://pokeapi.co/api/v2/pokemon/${validPokemon.id}`);
+                } else {
+                    console.log(`Descartado: ${pokemonDetails.name} (tiene ${pokemonDetails.moves.length} movimientos)`);
+                }
+            } catch (error) {
+                console.log(`Error al obtener Pokémon con ID ${randomId}:`, error);
             }
         }
 
