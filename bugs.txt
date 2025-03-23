@@ -1,2 +1,1 @@
-- Cuando el jugador cambia de Pokémon, no se cambia al pokemon seleccionado
-- Algunos Pokémon, como los voladores, no se renderizan en la posición correcta
+- No se actualiza la barra de salud del pokémon en el menú de Switch Pokémon
