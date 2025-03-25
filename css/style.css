@@ -70,6 +70,7 @@
     position: absolute;
     width: 120px; /* Ajusta el tamaño de los sprites */
     height: auto;
+    transition: transform 0.2s; /* Suaviza los movimientos rápidos */
 }
 
 .pokemon img {
@@ -89,6 +90,22 @@
     overflow: hidden;
 }
 
+.player-pokemon.player-attack {
+    animation: player-attack-animation 0.4s ease-out;
+}
+
+@keyframes player-attack-animation {
+    0% {
+        transform: scale(1.5) translateX(0, 0);
+    }
+    50% {
+        transform: scale(1.5) translate(150px, -50px);
+    }
+    100% {
+        transform: scale(1.5) translateX(0, 0);
+    }
+}
+
 /* Pokémon del enemigo (arriba a la derecha) */
 .enemy-pokemon {
     right: 15%;
@@ -99,6 +116,22 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
+}
+
+.enemy-pokemon.enemy-attack {
+    animation: enemy-attack-animation 0.4s ease-out;
+}
+
+@keyframes enemy-attack-animation {
+    0% {
+        transform: translate(0, 0);
+    }
+    50% {
+        transform: translate(-200px, 30px);
+    }
+    100% {
+        transform: translate(0, 0);
+    }
 }
 
 /* Barras de salud */

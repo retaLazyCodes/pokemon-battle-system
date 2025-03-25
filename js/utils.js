@@ -52,6 +52,25 @@ function createAttackButtons(moves) {
 }
 
 
+// Ejecutar animación de ataque del jugador
+function doAttackAnimation({ isPlayer = true } = {}) {
+    console.log("Ejecutando animación de ataque");
+
+    const pokemonId = isPlayer ? "player-pokemon" : "enemy-pokemon";
+    const attackClass = isPlayer ? "player-attack" : "enemy-attack";
+
+    const pokemonElement = document.getElementById(pokemonId);
+
+    if (!pokemonElement) return;
+
+    pokemonElement.classList.add(attackClass);
+
+    setTimeout(() => {
+        pokemonElement.classList.remove(attackClass);
+    }, 400); // Duración de la animación (0.4s)
+}
+
+
 // Función para renderizar el menú de cambio de Pokémon
 function renderSwitchMenu(player) {
     const switchContainer = document.querySelector(".switch-buttons");
@@ -187,5 +206,6 @@ export {
     renderSwitchMenu,
     renderPokemon,
     createAttackButtons,
-    displayTeams
+    displayTeams,
+    doAttackAnimation
 }

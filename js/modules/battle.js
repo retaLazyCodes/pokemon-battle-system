@@ -2,6 +2,7 @@ import {
     updateHealthBar,
     renderPokemon,
     displayTeams,
+    doAttackAnimation
 } from '../utils.js';
 
 export class Battle {
@@ -120,7 +121,7 @@ export class Battle {
             const enemyHPPercentage2 = this.player2.activePokemon.getHPPercentage();
 
             // Actualizar la UI con los nuevos porcentajes
-            await this.executeAttacks(null, this.player1, playerHPPercentage2, enemyHPPercentage2);
+            await this.executeAttacks(secondAttacker, this.player1, playerHPPercentage2, enemyHPPercentage2);
 
             if (this.player1.activePokemon.currentHealth <= 0) {
                 console.log(`${this.player1.activePokemon.name} ha sido derrotado!`);
@@ -145,17 +146,17 @@ export class Battle {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    async executeAttacks(firstAttacker, player1, playerHPPercentage, enemyHPPercentage) {
-        if (firstAttacker === player1) {
-            await this.delay(500);
+    async executeAttacks(currentAttacker, player1, playerHPPercentage, enemyHPPercentage) {
+        if (currentAttacker === player1) {
+            doAttackAnimation({ isPlayer: true });
+            await this.delay(1000);
             await this.updateUI(null, enemyHPPercentage);
             await this.delay(500);
-            await this.updateUI(playerHPPercentage, null);
         } else {
-            await this.delay(500);
+            await this.delay(1000);
+            doAttackAnimation({ isPlayer: false });
+            await this.delay(1000);
             await this.updateUI(playerHPPercentage, null);
-            await this.delay(500);
-            await this.updateUI(null, enemyHPPercentage);
         }
     }
 
