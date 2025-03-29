@@ -59,5 +59,4 @@ async function generateTeam({ revealTeam = false } = {}) {
     return team;
 }
 
-// Ejecutar la función cuando la página cargue
 document.addEventListener("DOMContentLoaded", startGame);

@@ -134,6 +134,7 @@ function onPokemonSwitch(player, index) {
     createAttackButtons(player.activePokemon.moves);
     renderSwitchMenu(player); // Volver a renderizar el menú
     updateHealthBar(player.activePokemon.getHPPercentage(), null);
+    addLogEntry(`${player.name} cambia de Pokémon a ${player.activePokemon.name}`);
 
     // Reanudar la batalla después del cambio
     const battle = Battle.getInstance();
@@ -192,6 +193,20 @@ function updateHealthBar(playerHP, enemyHP) {
     }
 }
 
+function addLogEntry(message) {
+    const logContainer = document.getElementById("battle-log");
+    const logEntry = document.createElement("div");
+    logEntry.classList.add("log-entry");
+    logEntry.textContent = message;
+    
+    logContainer.appendChild(logEntry);
+
+    // Mantener el scroll siempre en el último mensaje
+    logContainer.scrollTop = logContainer.scrollHeight;
+}
+
+addLogEntry("El combate ha comenzado!");
+
 // Llamar a la función con el porcentaje de vida
 let playerHP = 100;
 let enemyHP = 100;
@@ -207,5 +222,6 @@ export {
     renderPokemon,
     createAttackButtons,
     displayTeams,
-    doAttackAnimation
+    doAttackAnimation,
+    addLogEntry
 }

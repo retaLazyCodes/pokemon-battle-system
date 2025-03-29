@@ -2,7 +2,8 @@ import {
     updateHealthBar,
     renderPokemon,
     displayTeams,
-    doAttackAnimation
+    doAttackAnimation,
+    addLogEntry
 } from '../utils.js';
 
 export class Battle {
@@ -17,6 +18,7 @@ export class Battle {
         this.player1 = player1;
         this.player2 = player2;
         this.updateUI = updateUI;
+        this.turn = 0;
 
         Battle.instance = this;
     }
@@ -45,7 +47,8 @@ export class Battle {
             let firstAttacker, firstMove, secondAttacker, secondMove;
 
             if (!fromSwitch) {
-                console.log(`Es el turno de ${this.player1.name}`);
+                this.turn += 1;
+                addLogEntry(`==== TURNO ${this.turn} ====`)
 
                 const moveIndex = await this.waitForPlayerMove();
                 const playerMove = this.player1.activePokemon.getMove(moveIndex);
@@ -74,9 +77,14 @@ export class Battle {
                     }
                 }
 
-                console.log(`${firstAttacker.activePokemon.name} ataca con ${firstMove.name}`);
+                addLogEntry(`${firstAttacker.activePokemon.name} ataca con ${firstMove.name}`);
                 firstAttacker.activePokemon.attack(secondAttacker.activePokemon, firstMove);
-                console.log(`Vida restante de ${secondAttacker.activePokemon.name}: ${secondAttacker.activePokemon.currentHealth} (${secondAttacker.activePokemon.getHPPercentage()}%)`);
+
+                if (secondAttacker.activePokemon.currentHealth > 0) {
+                    addLogEntry(`Vida restante de ${secondAttacker.activePokemon.name}: ${secondAttacker.activePokemon.currentHealth} PS (${secondAttacker.activePokemon.getHPPercentage()}%)`);
+                } else {
+                    addLogEntry(`${secondAttacker.activePokemon.name} ha sido debilitado`)
+                }
 
                 // Calcular el porcentaje de vida restante
                 const playerHPPercentage = this.player1.activePokemon.getHPPercentage();
@@ -91,14 +99,12 @@ export class Battle {
                         continue;
                     } 
                     else if (secondAttacker == this.player1) {
-                        console.log(`${this.player1.activePokemon.name} ha sido derrotado!`);
-
                         // Si el Pokémon derrotado es del jugador, NO hacemos cambio automático
                         if (this.player1.hasAvailablePokemon()) {
                             console.log(`${this.player1.name}, elige un nuevo Pokémon.`);
                             return; // Detenemos la ejecución hasta que el jugador elija manualmente
                         } else {
-                            console.log(`${secondAttacker.name} ha ganado el combate`);
+                            addLogEntry(`${secondAttacker.name} ha ganado el combate`);
                             return;
                         }
                     } 
@@ -112,9 +118,14 @@ export class Battle {
                 fromSwitch = false;
             }
 
-            console.log(`${secondAttacker.activePokemon.name} ataca con ${secondMove.name}`);
+            addLogEntry(`${secondAttacker.activePokemon.name} ataca con ${secondMove.name}`);
             secondAttacker.activePokemon.attack(firstAttacker.activePokemon, secondMove);
-            console.log(`Vida restante de ${firstAttacker.activePokemon.name}: ${firstAttacker.activePokemon.currentHealth} (${firstAttacker.activePokemon.getHPPercentage()}%)`);
+            if (firstAttacker.activePokemon.currentHealth > 0) {
+                    addLogEntry(`Vida restante de ${firstAttacker.activePokemon.name}: ${firstAttacker.activePokemon.currentHealth} PS (${firstAttacker.activePokemon.getHPPercentage()}%)`);
+                } else {
+                    addLogEntry(`${firstAttacker.activePokemon.name} ha sido debilitado`)
+                }
+
 
             // Calcular el porcentaje de vida restante
             const playerHPPercentage2 = this.player1.activePokemon.getHPPercentage();
@@ -124,14 +135,12 @@ export class Battle {
             await this.executeAttacks(secondAttacker, this.player1, playerHPPercentage2, enemyHPPercentage2);
 
             if (this.player1.activePokemon.currentHealth <= 0) {
-                console.log(`${this.player1.activePokemon.name} ha sido derrotado!`);
-
                 // Si el Pokémon derrotado es del jugador, NO hacemos cambio automático
                 if (this.player1.hasAvailablePokemon()) {
                     console.log(`${this.player1.name}, elige un nuevo Pokémon.`);
                     return; // Detenemos la ejecución hasta que el jugador elija manualmente
                 } else {
-                    console.log(`${secondAttacker.name} ha ganado el combate`);
+                    addLogEntry(`${secondAttacker.name} ha ganado el combate`);
                     return;
                 }
             } else if (this.player2.activePokemon.currentHealth <= 0) {
@@ -176,13 +185,13 @@ export class Battle {
 
     changePokemon(player) {
         if (player.hasAvailablePokemon()) {
-            console.log(`${player.name} cambia de Pokémon.`);
             player.switchPokemon(null);
             renderPokemon(player.activePokemon, 'enemy-sprite', 'enemy-name', { frontImage: true });
+            addLogEntry(`${player.name} cambia de Pokémon a ${player.activePokemon.name}`);
             displayTeams(null, player.team)
             updateHealthBar(null, player.activePokemon.getHPPercentage())
         } else {
-            console.log(`${this.player1.name} ha ganado el combate`);
+            addLogEntry(`${this.player1.name} ha ganado el combate`);
             return;
         }
     }

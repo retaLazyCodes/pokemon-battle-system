@@ -36,9 +36,6 @@ export class Pokemon {
 	}
 
 	calculateMaxHP(baseHP) {
-		if (this._name === "Shedinja") {
-			return 1;
-		}
 		return Math.floor(((2 * baseHP * this._level) / 100) + this._level + 10);
 	}
 
