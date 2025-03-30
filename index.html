@@ -7,61 +7,65 @@
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-    <div class="battle">
-        <!-- Pokémon restantes del jugador -->
-        <div class="player-team"></div>
+    <div class="game-container">
 
-        <!-- Pokémon del jugador -->
-        <div id="player-pokemon" class="pokemon player-pokemon">
-            <img id="player-sprite" src="" alt="Pokémon del Jugador">
+        <div class="battle">
+            <!-- Pokémon restantes del jugador -->
+            <div class="player-team"></div>
+
+            <!-- Pokémon del jugador -->
+            <div id="player-pokemon" class="pokemon player-pokemon">
+                <img id="player-sprite" src="" alt="Pokémon del Jugador">
+            </div>
+
+            <!-- Nombre del Pokémon del jugador -->
+            <div id="player-name" class="pokemon-name">Cargando...</div>
+
+            <!-- Barra de salud del jugador -->
+            <div id="player-hp-bar" class="hp-bar">
+                <div id="player-hp" class="hp hp-full"></div> <!-- Aquí irá la clase dinámica -->
+                <div id="player-hp-text" class="hptext">100%</div> <!-- Texto de porcentaje -->
+            </div>
+
+            <!-- Pokémon del enemigo -->
+            <div id="enemy-pokemon" class="pokemon enemy-pokemon">
+                <img id="enemy-sprite" src="" alt="Pokémon del Enemigo">
+            </div>
+
+            <!-- Nombre del Pokémon del enemigo -->
+            <div id="enemy-name" class="pokemon-name">Cargando...</div>
+
+            <!-- Barra de salud del enemigo -->
+            <div id="enemy-hp-bar" class="hp-bar">
+                <div id="enemy-hp" class="hp hp-full"></div> <!-- Aquí irá la clase dinámica -->
+                <div id="enemy-hp-text" class="hptext">100%</div> <!-- Texto de porcentaje -->
+            </div>
+
+            <!-- Pokémon restantes del enemigo -->
+            <div class="enemy-team"></div>
         </div>
 
-        <!-- Nombre del Pokémon del jugador -->
-        <div id="player-name" class="pokemon-name">Cargando...</div>
-
-        <!-- Barra de salud del jugador -->
-        <div id="player-hp-bar" class="hp-bar">
-            <div id="player-hp" class="hp hp-full"></div> <!-- Aquí irá la clase dinámica -->
-            <div id="player-hp-text" class="hptext">100%</div> <!-- Texto de porcentaje -->
+        <div class="attack-section">
+            <h3 class="attack-title">Attack</h3>
+            <div class="attack-buttons">
+                <!-- Botones de ataque, se pueden agregar dinámicamente desde JavaScript -->
+            </div>
         </div>
 
-        <!-- Pokémon del enemigo -->
-        <div id="enemy-pokemon" class="pokemon enemy-pokemon">
-            <img id="enemy-sprite" src="" alt="Pokémon del Enemigo">
+        <div class="switch-section">
+            <h3 class="switch-title">Switch</h3>
+            <div class="switch-buttons">
+                <!-- Los botones para cambiar de Pokémon se generarán dinámicamente -->
+            </div>
         </div>
 
-        <!-- Nombre del Pokémon del enemigo -->
-        <div id="enemy-name" class="pokemon-name">Cargando...</div>
-
-        <!-- Barra de salud del enemigo -->
-        <div id="enemy-hp-bar" class="hp-bar">
-            <div id="enemy-hp" class="hp hp-full"></div> <!-- Aquí irá la clase dinámica -->
-            <div id="enemy-hp-text" class="hptext">100%</div> <!-- Texto de porcentaje -->
+        <div class="log-section">
+            <h3 class="log-title">Battle Log</h3>
+            <div id="battle-log" class="log-container">
+                <!-- Aquí se agregarán los eventos del combate -->
+            </div>
         </div>
 
-        <!-- Pokémon restantes del enemigo -->
-        <div class="enemy-team"></div>
-    </div>
-
-    <div class="attack-section">
-        <h3 class="attack-title">Attack</h3>
-        <div class="attack-buttons">
-            <!-- Botones de ataque, se pueden agregar dinámicamente desde JavaScript -->
-        </div>
-    </div>
-
-    <div class="switch-section">
-        <h3 class="switch-title">Switch</h3>
-        <div class="switch-buttons">
-            <!-- Los botones para cambiar de Pokémon se generarán dinámicamente -->
-        </div>
-    </div>
-
-    <div class="log-section">
-        <h3 class="log-title">Battle Log</h3>
-        <div id="battle-log" class="log-container">
-            <!-- Aquí se agregarán los eventos del combate -->
-        </div>
     </div>
 
     <script type="module" src="./js/main.js"></script>
