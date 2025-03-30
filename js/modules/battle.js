@@ -78,7 +78,10 @@ export class Battle {
                 }
 
                 addLogEntry(`${firstAttacker.activePokemon.name} ataca con ${firstMove.name}`);
-                firstAttacker.activePokemon.attack(secondAttacker.activePokemon, firstMove);
+                const result = firstAttacker.activePokemon.attack(secondAttacker.activePokemon, firstMove);
+                if (result) {
+                    addLogEntry("¡Un golpe crítico!")
+                }
 
                 if (secondAttacker.activePokemon.currentHealth > 0) {
                     addLogEntry(`Vida restante de ${secondAttacker.activePokemon.name}: ${secondAttacker.activePokemon.currentHealth} PS (${secondAttacker.activePokemon.getHPPercentage()}%)`);
@@ -119,12 +122,16 @@ export class Battle {
             }
 
             addLogEntry(`${secondAttacker.activePokemon.name} ataca con ${secondMove.name}`);
-            secondAttacker.activePokemon.attack(firstAttacker.activePokemon, secondMove);
+            const result = secondAttacker.activePokemon.attack(firstAttacker.activePokemon, secondMove);
+            if (result) {
+                addLogEntry("¡Un golpe crítico!")
+            }
+
             if (firstAttacker.activePokemon.currentHealth > 0) {
                     addLogEntry(`Vida restante de ${firstAttacker.activePokemon.name}: ${firstAttacker.activePokemon.currentHealth} PS (${firstAttacker.activePokemon.getHPPercentage()}%)`);
-                } else {
+            } else {
                     addLogEntry(`${firstAttacker.activePokemon.name} ha sido debilitado`)
-                }
+            }
 
 
             // Calcular el porcentaje de vida restante

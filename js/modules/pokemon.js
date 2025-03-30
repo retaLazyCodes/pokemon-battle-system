@@ -56,6 +56,7 @@ export class Pokemon {
 		console.log(
 			`${this._name} ataca a ${target._name} con un ataque de tipo ${move.type.name} y causa ${damage} de daño (x${effectiveness} efectividad, x${stab} STAB)${isCritical ? " ¡GOLPE CRÍTICO!" : ""}`
 		);
+		return isCritical;
 	}
 
 	calculateDamage(target, move, isCritical = false) {
