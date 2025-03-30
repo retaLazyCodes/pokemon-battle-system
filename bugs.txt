@@ -1,1 +1,2 @@
 - No se actualiza la barra de salud del pokémon en el menú de Switch Pokémon
+- Si el jugador realiza dos cambios consecutivos de forma muy rápida, el Pokémon del rival golpeará 2 veces al Pokémon que entra
