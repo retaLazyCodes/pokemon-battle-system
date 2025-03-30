@@ -12,6 +12,12 @@ body {
     background-color: white;
 }
 
+@media (max-width: 768px) {
+    .game-container {
+        margin: 0 auto;
+    }
+}
+
 .battle {
     position: relative; /* Permite posicionar elementos con absolute dentro */
     max-width: 640px; /* Limita el tamaño máximo en pantallas más grandes */
@@ -286,8 +292,7 @@ body {
 
 @media (max-width: 768px) {
     .attack-title {
-        margin-bottom: .5em;
-        margin-top: -.3em;
+        display: none;
     }
 }
 
@@ -347,13 +352,13 @@ body {
     flex-direction: column;
     margin: -5px auto 0 auto;
     padding: 10px;
-    max-width: 640px; 
-    border-top: 2px solid #ccc;
+    max-width: 640px;
 }
 
 @media (max-width: 768px) {
     .switch-section {
         padding: 0;
+        margin-top: 10px;
     }
 }
 
@@ -367,10 +372,8 @@ body {
 }
 
 @media (max-width: 768px) {
-    .switch-pokemon {
-        padding: 3px;
-        margin-bottom: .5em;
-        margin-left: 0px;
+    .switch-title {
+        display: none;
     }
 }
 
@@ -397,6 +400,14 @@ body {
     width: 100px;
     cursor: pointer;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    .switch-pokemon {
+        padding: 3px;
+        margin-bottom: .5em;
+        margin-left: 0px;
+    }
 }
 
 .switch-pokemon:hover {
@@ -460,8 +471,9 @@ body {
 }
 
 @media (max-width: 768px) {
-    .switch-buttons {
-        max-height: 120px;
+    .log-section {
+        margin-top: 5px;
+        min-height: 200px;
     }
 }
 
@@ -497,7 +509,7 @@ body {
 
 @media (max-width: 768px) {
     .log-container {
-        max-height: 100px;
+        max-height: 180px;
     }
 }
 
