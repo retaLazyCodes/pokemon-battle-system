@@ -1,5 +1,7 @@
 import { Battle } from "./modules/battle.js";
 
+let switchCooldown = false; // Variable para manejar el cooldown
+
 function capitalizeFirstLetter(word) {
     return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 }
@@ -126,11 +128,15 @@ function renderSwitchMenu(player) {
 
 // Función de cambio de Pokémon
 function onPokemonSwitch(player, index) {
+    if (switchCooldown) return; // Evita cambios si está en cooldown
+
+    switchCooldown = true; // Activa el cooldown
+
     const isPokemonFainted = player.activePokemon.currentHealth === 0;
 
     player.switchPokemon(index);
     renderPokemon(player.activePokemon, 'player-sprite', 'player-name', { frontImage: false });
-    displayTeams(player.team, null, player.activePokemon)
+    displayTeams(player.team, null, player.activePokemon);
     createAttackButtons(player.activePokemon.moves);
     renderSwitchMenu(player); // Volver a renderizar el menú
     updateHealthBar(player.activePokemon.getHPPercentage(), null);
@@ -139,6 +145,11 @@ function onPokemonSwitch(player, index) {
     // Reanudar la batalla después del cambio
     const battle = Battle.getInstance();
     battle.resume(isPokemonFainted);
+
+    // Rehabilitar los botones después de 3 segundos
+    setTimeout(() => {
+        switchCooldown = false;
+    }, 3000);
 }
 
 
